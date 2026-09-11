@@ -68,7 +68,10 @@ function ServidoresPage() {
       .select("id")
       .single();
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     setOpen(false);
     setNome("");
     setMatricula("");
