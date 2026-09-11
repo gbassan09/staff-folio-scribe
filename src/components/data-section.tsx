@@ -40,6 +40,7 @@ export function DataSection({
       const raw = form[f.key] ?? "";
       values[f.key] = raw.trim() ? raw : null;
     }
+    update.mutate(values, {
 
       onSuccess: () => toast.success("Informações salvas"),
       onError: (e) => toast.error(e.message),
