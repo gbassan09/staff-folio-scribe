@@ -36,8 +36,11 @@ export function DataSection({
 
   const save = () => {
     const values: Record<string, string | null> = {};
-    for (const f of fields) values[f.key] = form[f.key]?.trim() ? form[f.key] : null;
-    update.mutate(values, {
+    for (const f of fields) {
+      const raw = form[f.key] ?? "";
+      values[f.key] = raw.trim() ? raw : null;
+    }
+
       onSuccess: () => toast.success("Informações salvas"),
       onError: (e) => toast.error(e.message),
     });
