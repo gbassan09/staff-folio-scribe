@@ -51,8 +51,12 @@ function ServidoresPage() {
   const navigate = useNavigate();
 
   const criar = async () => {
-    if (!nome.trim()) return toast.error("Informe o nome do servidor");
+    if (!nome.trim()) {
+      toast.error("Informe o nome do servidor");
+      return;
+    }
     setBusy(true);
+
     const { data: userData } = await supabase.auth.getUser();
     const { data, error } = await supabase
       .from("servidores")
