@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ServidorIdRouteImport } from './routes/servidor.$id'
 import { Route as ServidorIdIndexRouteImport } from './routes/servidor.$id.index'
+import { Route as ServidorIdTrabalhoRouteImport } from './routes/servidor.$id.trabalho'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -34,16 +35,23 @@ const ServidorIdIndexRoute = ServidorIdIndexRouteImport.update({
   path: '/',
   getParentRoute: () => ServidorIdRoute,
 } as any)
+const ServidorIdTrabalhoRoute = ServidorIdTrabalhoRouteImport.update({
+  id: '/trabalho',
+  path: '/trabalho',
+  getParentRoute: () => ServidorIdRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/servidor/$id': typeof ServidorIdRouteWithChildren
+  '/servidor/$id/trabalho': typeof ServidorIdTrabalhoRoute
   '/servidor/$id/': typeof ServidorIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/servidor/$id/trabalho': typeof ServidorIdTrabalhoRoute
   '/servidor/$id': typeof ServidorIdIndexRoute
 }
 export interface FileRoutesById {
@@ -51,14 +59,26 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/servidor/$id': typeof ServidorIdRouteWithChildren
+  '/servidor/$id/trabalho': typeof ServidorIdTrabalhoRoute
   '/servidor/$id/': typeof ServidorIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/servidor/$id' | '/servidor/$id/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/servidor/$id'
+    | '/servidor/$id/trabalho'
+    | '/servidor/$id/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/servidor/$id'
-  id: '__root__' | '/' | '/auth' | '/servidor/$id' | '/servidor/$id/'
+  to: '/' | '/auth' | '/servidor/$id/trabalho' | '/servidor/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/auth'
+    | '/servidor/$id'
+    | '/servidor/$id/trabalho'
+    | '/servidor/$id/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -97,14 +117,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServidorIdIndexRouteImport
       parentRoute: typeof ServidorIdRoute
     }
+    '/servidor/$id/trabalho': {
+      id: '/servidor/$id/trabalho'
+      path: '/trabalho'
+      fullPath: '/servidor/$id/trabalho'
+      preLoaderRoute: typeof ServidorIdTrabalhoRouteImport
+      parentRoute: typeof ServidorIdRoute
+    }
   }
 }
 
 interface ServidorIdRouteChildren {
+  ServidorIdTrabalhoRoute: typeof ServidorIdTrabalhoRoute
   ServidorIdIndexRoute: typeof ServidorIdIndexRoute
 }
 
 const ServidorIdRouteChildren: ServidorIdRouteChildren = {
+  ServidorIdTrabalhoRoute: ServidorIdTrabalhoRoute,
   ServidorIdIndexRoute: ServidorIdIndexRoute,
 }
 
