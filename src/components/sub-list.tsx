@@ -50,7 +50,7 @@ export function SubList({
   };
 
   const openEdit = (row: ServidorRow) => {
-    setEditingId(row.id as string);
+    setEditingId(row['id'] as string);
     const next: Record<string, string> = { ...(defaults ?? {}) };
     for (const f of fields) next[f.key] = (row[f.key] as string) ?? "";
     setForm(next);
@@ -91,7 +91,7 @@ export function SubList({
         ) : (
           <ul className="divide-y">
             {rows.map((row) => (
-              <li key={row.id as string} className="flex flex-wrap items-start gap-x-8 gap-y-2 py-3">
+              <li key={row['id'] as string} className="flex flex-wrap items-start gap-x-8 gap-y-2 py-3">
                 <div className="grid flex-1 gap-x-8 gap-y-2 sm:grid-cols-2 lg:grid-cols-3">
                   {fields.map((f) => (
                     <div key={f.key}>
@@ -109,7 +109,7 @@ export function SubList({
                     variant="ghost"
                     aria-label="Excluir"
                     onClick={() =>
-                      remove.mutate(row.id as string, {
+                      remove.mutate(row['id'] as string, {
                         onSuccess: () => toast.success("Registro excluído"),
                         onError: (e) => toast.error(e.message),
                       })

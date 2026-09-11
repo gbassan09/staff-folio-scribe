@@ -66,7 +66,7 @@ export function useSubRecords(table: SubTable, servidorId: string) {
 export function useSaveSubRecord(table: SubTable, servidorId: string) {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, values }: { id?: string; values: ServidorRow }) => {
+    mutationFn: async ({ id, values }: { id?: string | undefined; values: ServidorRow }) => {
       if (id) {
         const { error } = await (supabase.from(table) as any).update(values).eq("id", id);
         if (error) throw error;
