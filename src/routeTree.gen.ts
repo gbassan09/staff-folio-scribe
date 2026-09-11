@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ServidorIdRouteImport } from './routes/servidor.$id'
+import { Route as ServidorIdIndexRouteImport } from './routes/servidor.$id.index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,35 +29,42 @@ const ServidorIdRoute = ServidorIdRouteImport.update({
   path: '/servidor/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ServidorIdIndexRoute = ServidorIdIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ServidorIdRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
-  '/servidor/$id': typeof ServidorIdRoute
+  '/servidor/$id': typeof ServidorIdRouteWithChildren
+  '/servidor/$id/': typeof ServidorIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
-  '/servidor/$id': typeof ServidorIdRoute
+  '/servidor/$id': typeof ServidorIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
-  '/servidor/$id': typeof ServidorIdRoute
+  '/servidor/$id': typeof ServidorIdRouteWithChildren
+  '/servidor/$id/': typeof ServidorIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/servidor/$id'
+  fullPaths: '/' | '/auth' | '/servidor/$id' | '/servidor/$id/'
   fileRoutesByTo: FileRoutesByTo
   to: '/' | '/auth' | '/servidor/$id'
-  id: '__root__' | '/' | '/auth' | '/servidor/$id'
+  id: '__root__' | '/' | '/auth' | '/servidor/$id' | '/servidor/$id/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
-  ServidorIdRoute: typeof ServidorIdRoute
+  ServidorIdRoute: typeof ServidorIdRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -82,13 +90,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServidorIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/servidor/$id/': {
+      id: '/servidor/$id/'
+      path: '/'
+      fullPath: '/servidor/$id/'
+      preLoaderRoute: typeof ServidorIdIndexRouteImport
+      parentRoute: typeof ServidorIdRoute
+    }
   }
 }
+
+interface ServidorIdRouteChildren {
+  ServidorIdIndexRoute: typeof ServidorIdIndexRoute
+}
+
+const ServidorIdRouteChildren: ServidorIdRouteChildren = {
+  ServidorIdIndexRoute: ServidorIdIndexRoute,
+}
+
+const ServidorIdRouteWithChildren = ServidorIdRoute._addFileChildren(
+  ServidorIdRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
-  ServidorIdRoute: ServidorIdRoute,
+  ServidorIdRoute: ServidorIdRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
